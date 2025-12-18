@@ -47,13 +47,13 @@ pipeline{
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
            }
         }
-            stage('TRIVY FS SCAN') {
-            steps {
-                sh "trivy fs . > trivyfs.txt"
-            }
-        }
-    }
-}
+        //     stage('TRIVY FS SCAN') {
+        //     steps {
+        //         sh "trivy fs . > trivyfs.txt"
+        //     }
+        // }
+    
+
         stage("Docker Build & Push"){
             steps{
                 script{
@@ -65,16 +65,18 @@ pipeline{
                 }
             }
         }
-        stage("TRIVY"){
+        // stage("TRIVY"){
+        //     steps{
+        //         sh "trivy image ash425/hotstar:latest > trivyimage.txt" 
+        //     }
+        // }
+        stage('Deploy to container'){
             steps{
-                sh "trivy image ash425/hotstar:latest > trivyimage.txt" 
+                sh 'docker run -d --name hotstar -p 3000:3000 ash425/hotstar:latest'
             }
         }
-//     //     stage('Deploy to container'){
-//     //         steps{
-//     //             sh 'docker run -d --name hotstar -p 3000:3000 aseemakram19/hotstar:latest'
-//     //         }
-//     //     }
+    }
+}
 
 //     // }
 //     // post {
