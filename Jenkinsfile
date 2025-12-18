@@ -75,6 +75,7 @@ pipeline{
                 sh 'docker run -d --name hotstar -p 3000:3000 ash425/hotstar:latest'
             }
         }
+    }
 
     
      post {
