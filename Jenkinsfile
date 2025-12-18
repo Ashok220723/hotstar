@@ -18,23 +18,25 @@ pipeline{
                 git branch: 'dev', url: 'https://github.com/Ashok220723/hotstar.git'
             }
         }
+    
+
+        stage("Sonarqube Analysis "){
+            steps{
+                withSonarQubeEnv('sonar-server') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Hotstar \
+                    -Dsonar.projectKey=Hotstar '''
+                }
+            }
+        }
+        stage("quality gate"){
+           steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+                }
+            } 
+        }
     }
 }
-//         stage("Sonarqube Analysis "){
-//             steps{
-//                 withSonarQubeEnv('sonar-server') {
-//                     sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Hotstar \
-//                     -Dsonar.projectKey=Hotstar '''
-//                 }
-//             }
-//         }
-//         stage("quality gate"){
-//            steps {
-//                 script {
-//                     waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
-//                 }
-//             } 
-//         }
 //         stage('Install Dependencies') {
 //             steps {
 //                 sh "npm install"
